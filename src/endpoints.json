@@ -233,6 +233,12 @@
     "scopes": ["Tasks.ReadWrite"]
   },
   {
+    "pathPattern": "/me/planner/plans",
+    "method": "get",
+    "toolName": "list-user-planner-plans",
+    "scopes": ["Tasks.Read"]
+  },
+  {
     "pathPattern": "/me/planner/tasks",
     "method": "get",
     "toolName": "list-planner-tasks",

@@ -43,7 +43,7 @@ create-onenote-page</sub>
 <sub>list-todo-task-lists, list-todo-tasks, get-todo-task, create-todo-task, update-todo-task, delete-todo-task</sub>
 
 **Planner**  
-<sub>list-planner-tasks, get-planner-plan, list-plan-tasks, get-planner-task, create-planner-task, update-planner-task, delete-planner-task</sub>
+<sub>list-user-planner-plans, list-planner-tasks, get-planner-plan, list-plan-tasks, get-planner-task, create-planner-task, update-planner-task, delete-planner-task</sub>
 
 **Contacts**  
 <sub>list-outlook-contacts, get-outlook-contact, create-outlook-contact, update-outlook-contact,

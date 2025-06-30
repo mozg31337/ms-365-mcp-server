@@ -19492,6 +19492,14 @@ const microsoft_graph_onenotePageCollectionResponse = z
   })
   .partial()
   .strict();
+const microsoft_graph_plannerPlanCollectionResponse = z
+  .object({
+    '@odata.count': z.number().int().nullable(),
+    '@odata.nextLink': z.string().nullable(),
+    value: z.array(microsoft_graph_plannerPlan),
+  })
+  .partial()
+  .strict();
 const microsoft_graph_plannerTaskCollectionResponse = z
   .object({
     '@odata.count': z.number().int().nullable(),
@@ -20079,6 +20087,7 @@ export const schemas = {
   microsoft_graph_notebookCollectionResponse,
   microsoft_graph_onenoteSectionCollectionResponse,
   microsoft_graph_onenotePageCollectionResponse,
+  microsoft_graph_plannerPlanCollectionResponse,
   microsoft_graph_plannerTaskCollectionResponse,
   microsoft_graph_todoTaskListCollectionResponse,
   microsoft_graph_todoTaskCollectionResponse,
@@ -22044,6 +22053,63 @@ or their delegates can book a private meeting room. If you&#x27;re organizing an
         status: NaN,
         description: `error`,
         schema: microsoft_graph_ODataErrors_ODataError,
+      },
+      {
+        status: NaN,
+        description: `error`,
+        schema: microsoft_graph_ODataErrors_ODataError,
+      },
+    ],
+  },
+  {
+    method: 'get',
+    path: '/me/planner/plans',
+    alias: 'list-user-planner-plans',
+    description: `Retrieve a list of plannerPlan objects for the current user.`,
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: '$top',
+        type: 'Query',
+        schema: z.number().int().gte(0).describe('Show only the first n items').optional(),
+      },
+      {
+        name: '$skip',
+        type: 'Query',
+        schema: z.number().int().gte(0).describe('Skip the first n items').optional(),
+      },
+      {
+        name: '$search',
+        type: 'Query',
+        schema: z.string().describe('Search plans by search phrases').optional(),
+      },
+      {
+        name: '$filter',
+        type: 'Query',
+        schema: z.string().describe('Filter plans by title or other properties').optional(),
+      },
+      {
+        name: '$select',
+        type: 'Query',
+        schema: z.array(z.string()).describe('Select properties to be returned').optional(),
+      },
+      {
+        name: '$orderby',
+        type: 'Query',
+        schema: z.array(z.string()).describe('Order items by property values').optional(),
+      },
+      {
+        name: '$count',
+        type: 'Query',
+        schema: z.boolean().describe('Include count of items').optional(),
+      },
+    ],
+    response: z.void(),
+    errors: [
+      {
+        status: NaN,
+        description: `Success`,
+        schema: microsoft_graph_plannerPlanCollectionResponse,
       },
       {
         status: NaN,
