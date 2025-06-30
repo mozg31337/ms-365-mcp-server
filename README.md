@@ -43,7 +43,7 @@ create-onenote-page</sub>
 <sub>list-todo-task-lists, list-todo-tasks, get-todo-task, create-todo-task, update-todo-task, delete-todo-task</sub>
 
 **Planner**  
-<sub>list-planner-tasks, get-planner-plan, list-plan-tasks, get-planner-task, create-planner-task</sub>
+<sub>list-planner-tasks, get-planner-plan, list-plan-tasks, get-planner-task, create-planner-task, update-planner-task, delete-planner-task</sub>
 
 **Contacts**  
 <sub>list-outlook-contacts, get-outlook-contact, create-outlook-contact, update-outlook-contact,
@@ -86,10 +86,7 @@ Edit the config file under Settings > Developer:
   "mcpServers": {
     "ms365": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@softeria/ms-365-mcp-server"
-      ]
+      "args": ["-y", "@softeria/ms-365-mcp-server"]
     }
   }
 }
@@ -115,9 +112,9 @@ The server supports two authentication methods:
 For interactive authentication via device code:
 
 - **MCP client login**:
-    - Call the `login` tool (auto-checks existing token)
-    - If needed, get URL+code, visit in browser
-    - Use `verify-login` tool to confirm
+  - Call the `login` tool (auto-checks existing token)
+  - If needed, get URL+code, visit in browser
+  - Use `verify-login` tool to confirm
 - **CLI login**:
   ```bash
   npx @softeria/ms-365-mcp-server --login

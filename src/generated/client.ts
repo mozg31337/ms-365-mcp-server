@@ -9363,11 +9363,11 @@ const microsoft_graph_responseStatus = z
   .partial()
   .strict();
 const microsoft_graph_attendee = z
-  .object({ 
-    proposedNewTime: microsoft_graph_timeSlot, 
+  .object({
+    proposedNewTime: microsoft_graph_timeSlot,
     status: microsoft_graph_responseStatus,
     emailAddress: microsoft_graph_emailAddress,
-    type: microsoft_graph_attendeeType
+    type: microsoft_graph_attendeeType,
   })
   .partial()
   .strict();
@@ -22540,6 +22540,78 @@ or their delegates can book a private meeting room. If you&#x27;re organizing an
         status: NaN,
         description: `error`,
         schema: microsoft_graph_ODataErrors_ODataError,
+      },
+      {
+        status: NaN,
+        description: `error`,
+        schema: microsoft_graph_ODataErrors_ODataError,
+      },
+    ],
+  },
+  {
+    method: 'patch',
+    path: '/planner/tasks/:plannerTaskId',
+    alias: 'update-planner-task',
+    description: `Update the properties of plannerTask object.`,
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'plannerTaskId',
+        type: 'Path',
+        schema: z.string(),
+      },
+      {
+        name: 'If-Match',
+        description: 'ETag value for concurrency control',
+        type: 'Header',
+        schema: z.string(),
+      },
+      {
+        name: 'body',
+        description: `Properties to update`,
+        type: 'Body',
+        schema: microsoft_graph_plannerTask,
+      },
+    ],
+    response: z.void(),
+    errors: [
+      {
+        status: NaN,
+        description: `Success`,
+        schema: microsoft_graph_plannerTask,
+      },
+      {
+        status: NaN,
+        description: `error`,
+        schema: microsoft_graph_ODataErrors_ODataError,
+      },
+    ],
+  },
+  {
+    method: 'delete',
+    path: '/planner/tasks/:plannerTaskId',
+    alias: 'delete-planner-task',
+    description: `Delete plannerTask object.`,
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'plannerTaskId',
+        type: 'Path',
+        schema: z.string(),
+      },
+      {
+        name: 'If-Match',
+        description: 'ETag value for concurrency control',
+        type: 'Header',
+        schema: z.string(),
+      },
+    ],
+    response: z.void(),
+    errors: [
+      {
+        status: NaN,
+        description: `Success`,
+        schema: z.void(),
       },
       {
         status: NaN,
