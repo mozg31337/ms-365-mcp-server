@@ -225,6 +225,38 @@ describe('Planner Task Operations', () => {
     });
   });
 
+  describe('ETag handling', () => {
+    it('should preserve @odata.etag in GET response for use in updates', async () => {
+      // Mock GET response with ETag
+      mockGraphClient.graphRequest.mockResolvedValue({
+        content: [{ 
+          text: JSON.stringify({
+            id: 'task-123',
+            title: 'Test Task',
+            percentComplete: 50,
+            '@odata.etag': 'W/"JzEtVGFzayAgQEBAQEBAQEBAQEBAQEBAWCc="'
+          })
+        }],
+        isError: false,
+      });
+
+      registerGraphTools(server, mockGraphClient, false);
+
+      const getToolCall = (server.tool as any).mock.calls.find(
+        (call: any) => call[0] === 'get-planner-task'
+      );
+      const [, , , , getHandler] = getToolCall;
+
+      const result = await getHandler({
+        plannerTaskId: 'task-123'
+      });
+
+      expect(result.isError).toBeFalsy();
+      const responseData = JSON.parse(result.content[0].text);
+      expect(responseData['@odata.etag']).toBe('W/"JzEtVGFzayAgQEBAQEBAQEBAQEBAQEBAWCc="');
+    });
+  });
+
   describe('read-only mode', () => {
     it('should skip update and delete tools in read-only mode', () => {
       const readOnlyServer = {

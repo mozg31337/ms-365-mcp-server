@@ -269,7 +269,7 @@ class GraphClient {
           obj.forEach((item) => removeODataProps(item));
         } else {
           Object.keys(obj).forEach((key) => {
-            if (key.startsWith('@odata') && !['@odata.nextLink', '@odata.count'].includes(key)) {
+            if (key.startsWith('@odata') && !['@odata.nextLink', '@odata.count', '@odata.etag'].includes(key)) {
               delete obj[key];
             } else if (typeof obj[key] === 'object') {
               removeODataProps(obj[key]);
