@@ -229,14 +229,16 @@ describe('Planner Task Operations', () => {
     it('should preserve @odata.etag in GET response for use in updates', async () => {
       // Mock GET response with ETag
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            id: 'task-123',
-            title: 'Test Task',
-            percentComplete: 50,
-            '@odata.etag': 'W/"JzEtVGFzayAgQEBAQEBAQEBAQEBAQEBAWCc="'
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              id: 'task-123',
+              title: 'Test Task',
+              percentComplete: 50,
+              '@odata.etag': 'W/"JzEtVGFzayAgQEBAQEBAQEBAQEBAQEBAWCc="',
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -248,7 +250,7 @@ describe('Planner Task Operations', () => {
       const [, , , , getHandler] = getToolCall;
 
       const result = await getHandler({
-        plannerTaskId: 'task-123'
+        plannerTaskId: 'task-123',
       });
 
       expect(result.isError).toBeFalsy();

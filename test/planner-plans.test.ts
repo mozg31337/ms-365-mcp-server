@@ -12,7 +12,7 @@ describe('Planner Plans Operations', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Create mock server
     server = {
       tool: vi.fn(),
@@ -22,7 +22,7 @@ describe('Planner Plans Operations', () => {
     mockGraphClient = {
       graphRequest: vi.fn(),
     } as any;
-    
+
     // Mock the GraphClient constructor
     (GraphClient as any).mockImplementation(() => mockGraphClient);
   });
@@ -50,27 +50,29 @@ describe('Planner Plans Operations', () => {
     it('should list all planner plans for the user', async () => {
       // Mock successful response with multiple plans
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            '@odata.count': 2,
-            value: [
-              {
-                id: 'plan-1',
-                title: 'IT Tasks',
-                createdDateTime: '2024-01-01T00:00:00Z',
-                owner: 'group-id-1',
-                '@odata.etag': 'W/"plan-etag-1"'
-              },
-              {
-                id: 'plan-2', 
-                title: 'Marketing Tasks',
-                createdDateTime: '2024-01-02T00:00:00Z',
-                owner: 'group-id-2',
-                '@odata.etag': 'W/"plan-etag-2"'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              '@odata.count': 2,
+              value: [
+                {
+                  id: 'plan-1',
+                  title: 'IT Tasks',
+                  createdDateTime: '2024-01-01T00:00:00Z',
+                  owner: 'group-id-1',
+                  '@odata.etag': 'W/"plan-etag-1"',
+                },
+                {
+                  id: 'plan-2',
+                  title: 'Marketing Tasks',
+                  createdDateTime: '2024-01-02T00:00:00Z',
+                  owner: 'group-id-2',
+                  '@odata.etag': 'W/"plan-etag-2"',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -78,7 +80,7 @@ describe('Planner Plans Operations', () => {
         (call: any) => call[0] === 'list-user-planner-plans'
       );
       expect(listToolCall).toBeDefined();
-      
+
       const [, , , , handler] = listToolCall;
 
       const result = await handler({});
@@ -86,13 +88,13 @@ describe('Planner Plans Operations', () => {
       expect(mockGraphClient.graphRequest).toHaveBeenCalledWith(
         '/me/planner/plans',
         expect.objectContaining({
-          method: 'GET'
+          method: 'GET',
         })
       );
 
       expect(result.content).toHaveLength(1);
       expect(result.isError).toBeFalsy();
-      
+
       const responseData = JSON.parse(result.content[0].text);
       expect(responseData.value).toHaveLength(2);
       expect(responseData.value[0].title).toBe('IT Tasks');
@@ -102,18 +104,20 @@ describe('Planner Plans Operations', () => {
     it('should support filtering plans by title', async () => {
       // Mock filtered response
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            value: [
-              {
-                id: 'plan-1',
-                title: 'IT Tasks',
-                createdDateTime: '2024-01-01T00:00:00Z',
-                owner: 'group-id-1'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              value: [
+                {
+                  id: 'plan-1',
+                  title: 'IT Tasks',
+                  createdDateTime: '2024-01-01T00:00:00Z',
+                  owner: 'group-id-1',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -123,13 +127,13 @@ describe('Planner Plans Operations', () => {
       const [, , , , handler] = listToolCall;
 
       const result = await handler({
-        filter: "contains(title,'IT')"
+        filter: "contains(title,'IT')",
       });
 
       expect(mockGraphClient.graphRequest).toHaveBeenCalledWith(
         "/me/planner/plans?%24filter=contains(title%2C'IT')",
         expect.objectContaining({
-          method: 'GET'
+          method: 'GET',
         })
       );
 
@@ -141,17 +145,19 @@ describe('Planner Plans Operations', () => {
 
     it('should support searching plans', async () => {
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            value: [
-              {
-                id: 'plan-1',
-                title: 'IT Department Tasks',
-                createdDateTime: '2024-01-01T00:00:00Z'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              value: [
+                {
+                  id: 'plan-1',
+                  title: 'IT Department Tasks',
+                  createdDateTime: '2024-01-01T00:00:00Z',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -161,13 +167,13 @@ describe('Planner Plans Operations', () => {
       const [, , , , handler] = listToolCall;
 
       const result = await handler({
-        search: 'IT department'
+        search: 'IT department',
       });
 
       expect(mockGraphClient.graphRequest).toHaveBeenCalledWith(
         '/me/planner/plans?%24search=IT%20department',
         expect.objectContaining({
-          method: 'GET'
+          method: 'GET',
         })
       );
 
@@ -176,17 +182,19 @@ describe('Planner Plans Operations', () => {
 
     it('should support pagination with top and skip parameters', async () => {
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            '@odata.nextLink': 'https://graph.microsoft.com/v1.0/me/planner/plans?$skip=5',
-            value: [
-              {
-                id: 'plan-1',
-                title: 'Plan 1'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              '@odata.nextLink': 'https://graph.microsoft.com/v1.0/me/planner/plans?$skip=5',
+              value: [
+                {
+                  id: 'plan-1',
+                  title: 'Plan 1',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -197,13 +205,13 @@ describe('Planner Plans Operations', () => {
 
       const result = await handler({
         top: 5,
-        skip: 0
+        skip: 0,
       });
 
       expect(mockGraphClient.graphRequest).toHaveBeenCalledWith(
         '/me/planner/plans?%24top=5&%24skip=0',
         expect.objectContaining({
-          method: 'GET'
+          method: 'GET',
         })
       );
 
@@ -212,17 +220,19 @@ describe('Planner Plans Operations', () => {
 
     it('should support selecting specific properties', async () => {
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            value: [
-              {
-                id: 'plan-1',
-                title: 'IT Tasks'
-                // Only selected properties returned
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              value: [
+                {
+                  id: 'plan-1',
+                  title: 'IT Tasks',
+                  // Only selected properties returned
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -232,13 +242,13 @@ describe('Planner Plans Operations', () => {
       const [, , , , handler] = listToolCall;
 
       const result = await handler({
-        select: ['id', 'title']
+        select: ['id', 'title'],
       });
 
       expect(mockGraphClient.graphRequest).toHaveBeenCalledWith(
         '/me/planner/plans?%24select=id%2Ctitle',
         expect.objectContaining({
-          method: 'GET'
+          method: 'GET',
         })
       );
 
@@ -247,22 +257,24 @@ describe('Planner Plans Operations', () => {
 
     it('should support ordering plans', async () => {
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            value: [
-              {
-                id: 'plan-2',
-                title: 'Marketing Tasks',
-                createdDateTime: '2024-01-02T00:00:00Z'
-              },
-              {
-                id: 'plan-1',
-                title: 'IT Tasks', 
-                createdDateTime: '2024-01-01T00:00:00Z'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              value: [
+                {
+                  id: 'plan-2',
+                  title: 'Marketing Tasks',
+                  createdDateTime: '2024-01-02T00:00:00Z',
+                },
+                {
+                  id: 'plan-1',
+                  title: 'IT Tasks',
+                  createdDateTime: '2024-01-01T00:00:00Z',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -272,13 +284,13 @@ describe('Planner Plans Operations', () => {
       const [, , , , handler] = listToolCall;
 
       const result = await handler({
-        orderby: ['createdDateTime desc']
+        orderby: ['createdDateTime desc'],
       });
 
       expect(mockGraphClient.graphRequest).toHaveBeenCalledWith(
         '/me/planner/plans?%24orderby=createdDateTime%20desc',
         expect.objectContaining({
-          method: 'GET'
+          method: 'GET',
         })
       );
 
@@ -287,12 +299,14 @@ describe('Planner Plans Operations', () => {
 
     it('should handle empty results', async () => {
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            '@odata.count': 0,
-            value: []
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              '@odata.count': 0,
+              value: [],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -328,16 +342,18 @@ describe('Planner Plans Operations', () => {
 
     it('should combine multiple query parameters correctly', async () => {
       mockGraphClient.graphRequest.mockResolvedValue({
-        content: [{ 
-          text: JSON.stringify({
-            value: [
-              {
-                id: 'plan-1',
-                title: 'IT Tasks'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              value: [
+                {
+                  id: 'plan-1',
+                  title: 'IT Tasks',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -350,13 +366,13 @@ describe('Planner Plans Operations', () => {
         filter: "contains(title,'IT')",
         top: 10,
         select: ['id', 'title'],
-        orderby: ['title']
+        orderby: ['title'],
       });
 
       expect(mockGraphClient.graphRequest).toHaveBeenCalledWith(
         "/me/planner/plans?%24filter=contains(title%2C'IT')&%24top=10&%24select=id%2Ctitle&%24orderby=title",
         expect.objectContaining({
-          method: 'GET'
+          method: 'GET',
         })
       );
 
@@ -372,40 +388,44 @@ describe('Planner Plans Operations', () => {
     it('should enable workflow: find plan by name → get tasks from plan', async () => {
       // Step 1: Mock plan search response
       mockGraphClient.graphRequest.mockResolvedValueOnce({
-        content: [{ 
-          text: JSON.stringify({
-            value: [
-              {
-                id: 'plan-123',
-                title: 'IT Tasks',
-                owner: 'group-id-1'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              value: [
+                {
+                  id: 'plan-123',
+                  title: 'IT Tasks',
+                  owner: 'group-id-1',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
       // Step 2: Mock tasks from plan response
       mockGraphClient.graphRequest.mockResolvedValueOnce({
-        content: [{ 
-          text: JSON.stringify({
-            value: [
-              {
-                id: 'task-1',
-                title: 'Setup server',
-                percentComplete: 50,
-                planId: 'plan-123'
-              },
-              {
-                id: 'task-2', 
-                title: 'Configure firewall',
-                percentComplete: 0,
-                planId: 'plan-123'
-              }
-            ]
-          })
-        }],
+        content: [
+          {
+            text: JSON.stringify({
+              value: [
+                {
+                  id: 'task-1',
+                  title: 'Setup server',
+                  percentComplete: 50,
+                  planId: 'plan-123',
+                },
+                {
+                  id: 'task-2',
+                  title: 'Configure firewall',
+                  percentComplete: 0,
+                  planId: 'plan-123',
+                },
+              ],
+            }),
+          },
+        ],
         isError: false,
       });
 
@@ -416,15 +436,15 @@ describe('Planner Plans Operations', () => {
       const listTasksCall = (server.tool as any).mock.calls.find(
         (call: any) => call[0] === 'list-plan-tasks'
       );
-      
+
       const [, , , , listPlansHandler] = listPlansCall;
       const [, , , , listTasksHandler] = listTasksCall;
 
       // Step 1: Search for plan by name
       const planResult = await listPlansHandler({
-        filter: "contains(title,'IT Tasks')"
+        filter: "contains(title,'IT Tasks')",
       });
-      
+
       expect(planResult.isError).toBeFalsy();
       const planData = JSON.parse(planResult.content[0].text);
       const foundPlan = planData.value[0];
@@ -432,7 +452,7 @@ describe('Planner Plans Operations', () => {
 
       // Step 2: Get tasks from the found plan
       const tasksResult = await listTasksHandler({
-        plannerPlanId: foundPlan.id
+        plannerPlanId: foundPlan.id,
       });
 
       expect(tasksResult.isError).toBeFalsy();

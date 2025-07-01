@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.10.0] - 2025-06-30
+## [0.11.0] - 2025-06-30
 
 ### Added
 
@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for all updatable planner task properties (title, percentComplete, priority, dueDateTime, assignments, appliedCategories, bucketId)
 
 ### Enhanced User Experience
+
 - **Natural Language Queries**: Users can now say "Give me all tasks from the planner named 'IT tasks'"
 - **Plan Discovery**: No longer need to know plan IDs - search by name or list all plans
 - **Advanced Filtering**: Rich query capabilities for finding specific plans
@@ -40,6 +41,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 
 - Microsoft Graph API permissions: `Tasks.Read` scope for plan listing and search, `Tasks.ReadWrite` scope required for update/delete operations
+
+## [0.10.0] - 2025-06-30
+
+### Initial Planner Task Management
+
+- Added `update-planner-task` and `delete-planner-task` endpoints
+- Fixed critical ETag handling for planner operations
+- Basic planner task CRUD operations
 
 ## [0.9.12] - Previous Release
 
